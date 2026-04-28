@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
     private GameObject focalPoint;
     public bool hasPowerup;
     private float powerupStrength = 15.0f;
+    public GameObject powerupIndicator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,6 +20,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed *  forwardInput);
     }
@@ -26,8 +29,18 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Powerup"))
         {
+            powerupIndicator.gameObject.SetActive(true);
             hasPowerup = true;
             Destroy(other.gameObject);
+            StartCoroutine(PowerupCountdownRoutine());
+            
+            IEnumerator PowerupCountdownRoutine()
+                { 
+                yield return new WaitForSeconds(7);
+                    hasPowerup = false;
+                powerupIndicator.gameObject.SetActive(false);
+                }
+            
         }
     }
 
