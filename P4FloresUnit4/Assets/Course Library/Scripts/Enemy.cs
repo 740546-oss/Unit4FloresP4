@@ -11,6 +11,10 @@ public class Enemy : MonoBehaviour
     {
         enemyRb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
+        if (transform.position.y < -10)
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
